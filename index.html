@@ -4,14 +4,16 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex">
+<meta name="theme-color" content="#1F3A2E">
 <title>Who's a Good Tag</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Work+Sans:wght@400;500;600&display=swap">
+<script src="config.js"></script>
 <style>
 :root{
   --forest:#1F3A2E; --forest-2:#2E5141; --orange:#C9601F; --bone:#F3EFE6; --card:#FFFFFF;
-  --ink:#1A1F1C; --muted:#5A6359; --line:#E2DCCF; --alert:#B3261E;
+  --ink:#1A1F1C; --muted:#5A6359; --line:#E2DCCF; --alert:#B3261E; --ok:#2E7D4F;
   --display:'Archivo Black','Arial Black',system-ui,sans-serif;
   --body:'Work Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
 }
@@ -22,164 +24,444 @@ body{background:var(--bone);color:var(--ink);font-family:var(--body);font-size:1
 .wrap{max-width:480px;margin:0 auto;padding:20px 16px 40px;display:flex;flex-direction:column;gap:16px}
 .brand{display:flex;align-items:center;gap:10px;color:var(--forest);font-weight:600;font-size:14px;letter-spacing:.08em;text-transform:uppercase}
 .badge{width:30px;height:30px;border-radius:50%;background:var(--forest);color:var(--bone);display:grid;place-items:center;font-family:var(--display);font-size:11px;letter-spacing:0}
-.lost{background:var(--alert);color:#fff;border-radius:14px;padding:14px 16px;font-weight:600}
+.banner{border-radius:14px;padding:14px 16px;font-weight:600}
+.lost{background:var(--alert);color:#fff}
+.reward{background:var(--orange);color:#fff;text-align:center}
 .hero{display:flex;flex-direction:column;align-items:center;text-align:center;gap:10px;padding:8px 0 4px}
-.photo{width:132px;height:132px;border-radius:50%;object-fit:cover;border:4px solid var(--card);box-shadow:0 2px 10px rgba(0,0,0,.12)}
+.photo{width:140px;height:140px;border-radius:50%;object-fit:cover;border:4px solid var(--card);box-shadow:0 2px 10px rgba(0,0,0,.12)}
 .paw{width:96px;height:96px;border-radius:50%;background:var(--forest);display:grid;place-items:center}
-h1{font-family:var(--display);font-weight:400;font-size:38px;line-height:1.05;margin:0;color:var(--forest);text-wrap:balance}
-.msg{margin:0;color:var(--ink);max-width:36ch}
+h1{font-family:var(--display);font-weight:400;font-size:36px;line-height:1.05;margin:0;color:var(--forest);text-wrap:balance}
+h2.section{font-family:var(--display);font-weight:400;font-size:24px;margin:0;color:var(--forest)}
+.msg{margin:0;max-width:36ch}
 .btn{display:flex;align-items:center;justify-content:center;gap:10px;min-height:58px;border-radius:14px;
-  font:600 19px var(--body);text-decoration:none;border:0;width:100%;cursor:pointer;padding:0 16px}
+  font:600 19px var(--body);text-decoration:none;border:0;width:100%;cursor:pointer;padding:0 16px;text-align:center}
 .btn svg{flex:none}
 .primary{background:var(--forest);color:var(--bone)}
 .secondary{background:var(--card);color:var(--forest);border:2px solid var(--forest)}
 .ghost{background:var(--card);color:var(--ink);border:1px solid var(--line)}
 .btn:active{transform:translateY(1px)}
-.btn:focus-visible{outline:3px solid var(--orange);outline-offset:2px}
+.btn:disabled{opacity:.6;cursor:default}
+.btn:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid var(--orange);outline-offset:2px}
 .stack{display:flex;flex-direction:column;gap:10px}
 .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px 18px;display:flex;flex-direction:column;gap:8px}
-.card h2{margin:0;font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.card h3{margin:0;font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:600}
 .card p{margin:0}
 .card ul{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:4px}
+.card.home{border:2px solid var(--forest)}
 .big{font-size:20px;font-weight:600}
 .note{font-size:14px;color:var(--muted);margin:0}
-.reward{background:var(--orange);color:#fff;border-radius:14px;padding:12px 16px;font-weight:600;text-align:center}
+.linkbtn{background:none;border:0;color:var(--muted);font:500 15px var(--body);text-decoration:underline;cursor:pointer;padding:10px;align-self:center}
+/* forms */
+form{display:flex;flex-direction:column;gap:14px}
+fieldset{border:1px solid var(--line);background:var(--card);border-radius:16px;padding:14px 16px 16px;margin:0;display:flex;flex-direction:column;gap:12px;min-width:0}
+legend{font-weight:600;color:var(--forest);padding:0 6px}
+label{display:flex;flex-direction:column;gap:6px;font-weight:600;font-size:15px}
+label .hint{font-weight:400;color:var(--muted);font-size:14px}
+input[type=text],input[type=tel],input[type=password],textarea{font:400 17px var(--body);padding:12px 14px;border:1px solid #CFC8B8;border-radius:12px;background:#fff;color:var(--ink);width:100%}
+textarea{min-height:88px;resize:vertical}
+.check{flex-direction:row;align-items:flex-start;gap:12px;font-weight:500}
+.check input{width:24px;height:24px;margin:2px 0 0;flex:none;accent-color:var(--forest)}
+.codebox{font:600 26px ui-monospace,Menlo,monospace!important;letter-spacing:.2em;text-transform:uppercase;text-align:center}
+.err{background:#FDECEA;color:var(--alert);border-radius:12px;padding:12px 14px;font-weight:600;margin:0}
+.okmsg{background:#E6F4EC;color:var(--ok);border-radius:12px;padding:12px 14px;font-weight:600;margin:0}
+.photopick{display:flex;align-items:center;gap:14px}
+.photopick img{width:72px;height:72px;border-radius:50%;object-fit:cover;background:var(--bone)}
 footer{text-align:center;font-size:13px;color:var(--muted);padding-top:8px}
 [hidden]{display:none!important}
 </style>
 </head>
 <body>
-<main class="wrap" id="app">
-  <div class="brand"><span class="badge">GT</span>Who's a Good Tag</div>
+<main class="wrap">
+  <div class="brand"><span class="badge">GT</span><span id="bizname">Who's a Good Tag</span></div>
 
-  <!-- Dog profile (filled in from d/<id>.json) -->
+  <p id="loading" class="note" style="text-align:center;padding:40px 0">Loading…</p>
+
+  <!-- =========================== FINDER VIEW =========================== -->
   <section id="profile" class="stack" hidden>
-    <div class="lost" id="lost" hidden>I'm lost and my family is looking for me. Please call or text them now.</div>
+    <div class="banner lost" id="p-lost" hidden>I'm lost and my family is looking for me. Please call or text them now.</div>
     <div class="hero">
-      <img class="photo" id="photo" alt="" hidden>
-      <div class="paw" id="paw" aria-hidden="true">
-        <svg width="54" height="54" viewBox="0 0 120 120" fill="none"><ellipse cx="60" cy="74" rx="20" ry="17" fill="#F3EFE6"/><circle cx="35" cy="50" r="9" fill="#F3EFE6"/><circle cx="51" cy="36" r="9" fill="#F3EFE6"/><circle cx="69" cy="36" r="9" fill="#F3EFE6"/><circle cx="85" cy="50" r="9" fill="#F3EFE6"/></svg>
-      </div>
-      <h1 id="dogname">Hi!</h1>
-      <p class="msg" id="message"></p>
+      <img class="photo" id="p-photo" alt="" hidden>
+      <div class="paw" id="p-paw" aria-hidden="true"><svg width="54" height="54" viewBox="0 0 120 120"><ellipse cx="60" cy="76" rx="20" ry="17" fill="#F3EFE6"/><circle cx="35" cy="52" r="9" fill="#F3EFE6"/><circle cx="51" cy="38" r="9" fill="#F3EFE6"/><circle cx="69" cy="38" r="9" fill="#F3EFE6"/><circle cx="85" cy="52" r="9" fill="#F3EFE6"/></svg></div>
+      <h1 id="p-name"></h1>
+      <p class="msg" id="p-message"></p>
     </div>
-    <div class="reward" id="reward" hidden></div>
+    <div class="banner reward" id="p-reward" hidden></div>
 
     <div class="stack">
-      <a class="btn primary" id="call" href="#">
+      <a class="btn primary" id="p-call" href="#">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg>
-        <span id="calltext">Call my family</span></a>
-      <a class="btn secondary" id="text" href="#">
+        <span id="p-calltext"></span></a>
+      <a class="btn secondary" id="p-text" href="#">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-        <span>Text my family</span></a>
-      <button class="btn ghost" id="loc" type="button">
+        <span id="p-texttext"></span></a>
+      <button class="btn ghost" id="p-loc" type="button">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s7-6.2 7-12a7 7 0 0 0-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></svg>
-        <span id="loctext">Text them where you found me</span></button>
-      <p class="note" id="locnote" hidden></p>
+        <span id="p-loctext">Text them where you found me</span></button>
+      <p class="note" id="p-locnote" hidden></p>
     </div>
 
-    <div class="card" id="backupcard" hidden>
-      <h2>Backup contact</h2>
-      <p class="big" id="backupname"></p>
-      <a class="btn ghost" id="backupcall" href="#">Call backup</a>
+    <div class="card home" id="p-homecard" hidden>
+      <h3>Bring me home</h3>
+      <p class="big" id="p-address" hidden></p>
+      <p id="p-dropoff" hidden></p>
+      <a class="btn primary" id="p-directions" href="#" target="_blank" rel="noopener" hidden>
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l18-8-8 18-2-8-8-2z"/></svg>
+        Get directions</a>
     </div>
 
-    <div class="card" id="homecard" hidden>
-      <h2>Where I live</h2>
-      <p class="big" id="homearea"></p>
-      <p id="address" hidden></p>
+    <div class="card" id="p-backupcard" hidden>
+      <h3>Backup contact</h3>
+      <p class="big" id="p-backupname"></p>
+      <a class="btn ghost" id="p-backupcall" href="#"></a>
     </div>
 
-    <div class="card" id="carecard" hidden>
-      <h2>About me</h2>
-      <ul id="care"></ul>
+    <div class="card" id="p-carecard" hidden>
+      <h3>About me</h3>
+      <ul id="p-care"></ul>
     </div>
 
-    <div class="card" id="returncard" hidden>
-      <h2>If no one answers</h2>
-      <p id="returnnote"></p>
-    </div>
+    <button class="linkbtn" id="p-owner" type="button">Is this your dog? Edit this page</button>
   </section>
 
-  <!-- No ID, or unknown ID -->
+  <!-- =========================== ENTER CODE (setup or edit) =========================== -->
+  <section id="codeview" class="stack" hidden>
+    <div class="hero">
+      <div class="paw" aria-hidden="true"><svg width="54" height="54" viewBox="0 0 120 120"><ellipse cx="60" cy="76" rx="20" ry="17" fill="#F3EFE6"/><circle cx="35" cy="52" r="9" fill="#F3EFE6"/><circle cx="51" cy="38" r="9" fill="#F3EFE6"/><circle cx="69" cy="38" r="9" fill="#F3EFE6"/><circle cx="85" cy="52" r="9" fill="#F3EFE6"/></svg></div>
+      <h1 id="c-title">Set up your tag</h1>
+      <p class="msg" id="c-sub">Welcome! Enter the setup code that came with your tag.</p>
+    </div>
+    <form id="c-form" autocomplete="off">
+      <p class="note" id="c-tagid" style="text-align:center"></p>
+      <label for="c-code">Your code
+        <input type="text" id="c-code" class="codebox" inputmode="text" autocapitalize="characters" spellcheck="false" maxlength="24" required>
+      </label>
+      <p class="err" id="c-err" hidden></p>
+      <button class="btn primary" type="submit" id="c-go">Continue</button>
+    </form>
+    <p class="note" id="c-help" style="text-align:center">Lost your code? Text or email us and we'll send a new one.</p>
+    <button class="linkbtn" id="c-back" type="button" hidden>Back to the dog's page</button>
+  </section>
+
+  <!-- =========================== OWNER FORM (setup + edit) =========================== -->
+  <section id="formview" class="stack" hidden>
+    <div class="hero" style="padding-bottom:0">
+      <h1 id="f-title">Tell us about your dog</h1>
+      <p class="msg" id="f-sub">This is what someone sees when they tap your dog's tag.</p>
+    </div>
+    <form id="f-form" novalidate>
+      <fieldset id="f-lostbox" hidden>
+        <legend>Lost mode</legend>
+        <label class="check"><input type="checkbox" id="f-lost"><span>My dog is lost right now.<br><span class="hint">Shows a red "I'm lost" banner at the top of the page.</span></span></label>
+      </fieldset>
+
+      <fieldset>
+        <legend>Your dog</legend>
+        <label for="f-dog_name">Dog's name *<input type="text" id="f-dog_name" maxlength="40" required></label>
+        <div class="photopick">
+          <img id="f-photoprev" alt="" hidden>
+          <label for="f-photo" style="flex:1">Photo <span class="hint">Optional. Helps people know it's the right dog.</span>
+            <input type="file" id="f-photo" accept="image/*"></label>
+        </div>
+        <button class="linkbtn" id="f-photoremove" type="button" style="align-self:flex-start;padding:0" hidden>Remove photo</button>
+        <label for="f-message">Message to whoever finds your dog
+          <textarea id="f-message" maxlength="300">If I'm out on my own, I'm probably lost. Please help me get home.</textarea></label>
+      </fieldset>
+
+      <fieldset>
+        <legend>You</legend>
+        <label for="f-owner_name">Your first name <span class="hint">Buttons will say "Call Casey" instead of "Call my family."</span><input type="text" id="f-owner_name" maxlength="60" autocomplete="given-name"></label>
+        <label for="f-owner_phone">Your phone number *<input type="tel" id="f-owner_phone" maxlength="30" autocomplete="tel" required></label>
+      </fieldset>
+
+      <fieldset>
+        <legend>Backup contact</legend>
+        <p class="note">Someone to call if you don't answer: a partner, family member, or neighbor.</p>
+        <label for="f-backup_name">Name<input type="text" id="f-backup_name" maxlength="60"></label>
+        <label for="f-backup_phone">Phone number<input type="tel" id="f-backup_phone" maxlength="30"></label>
+      </fieldset>
+
+      <fieldset>
+        <legend>Home &amp; drop-off</legend>
+        <label for="f-address">Home address<input type="text" id="f-address" maxlength="200" autocomplete="street-address" placeholder="123 Main St, Placerville, CA"></label>
+        <label class="check"><input type="checkbox" id="f-show_address"><span>Show my address to the person who finds my dog<br><span class="hint">Leave this off if you'd rather they call first. Turn it on so they can bring your dog straight home.</span></span></label>
+        <label for="f-dropoff">Drop-off instructions
+          <span class="hint">For example: "Put him in the side gate on the right of my house."</span>
+          <textarea id="f-dropoff" maxlength="300"></textarea></label>
+      </fieldset>
+
+      <fieldset>
+        <legend>About your dog</legend>
+        <label for="f-care_notes">Care notes <span class="hint">One per line: allergies, medications, "shy with men," etc.</span>
+          <textarea id="f-care_notes" maxlength="600"></textarea></label>
+        <label for="f-reward">Reward <span class="hint">Optional, e.g. "Reward if found"</span><input type="text" id="f-reward" maxlength="80"></label>
+      </fieldset>
+
+      <fieldset id="f-newcodebox">
+        <legend>Your owner code</legend>
+        <p class="note" id="f-codenote">You'll use your code to edit this page later. Keep the card, or choose your own code below.</p>
+        <label for="f-newcode">New code <span class="hint">Optional. 4 to 20 letters or numbers.</span><input type="text" id="f-newcode" maxlength="20" autocapitalize="characters" spellcheck="false"></label>
+      </fieldset>
+
+      <p class="err" id="f-err" hidden></p>
+      <button class="btn primary" type="submit" id="f-save">Save</button>
+      <button class="linkbtn" id="f-cancel" type="button">Cancel</button>
+    </form>
+  </section>
+
+  <!-- =========================== DONE =========================== -->
+  <section id="doneview" class="stack" hidden>
+    <div class="hero">
+      <div class="paw" aria-hidden="true"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#F3EFE6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
+      <h1 id="d-title">All set!</h1>
+      <p class="msg" id="d-sub">Your dog's page is live. Anyone who taps the tag will see it.</p>
+    </div>
+    <p class="okmsg" id="d-code" hidden></p>
+    <button class="btn primary" id="d-view" type="button">See the page</button>
+  </section>
+
+  <!-- =========================== LANDING / ERRORS =========================== -->
   <section id="landing" class="stack" hidden>
     <div class="hero">
-      <div class="paw" aria-hidden="true">
-        <svg width="54" height="54" viewBox="0 0 120 120" fill="none"><ellipse cx="60" cy="74" rx="20" ry="17" fill="#F3EFE6"/><circle cx="35" cy="50" r="9" fill="#F3EFE6"/><circle cx="51" cy="36" r="9" fill="#F3EFE6"/><circle cx="69" cy="36" r="9" fill="#F3EFE6"/><circle cx="85" cy="50" r="9" fill="#F3EFE6"/></svg>
-      </div>
-      <h1 id="landtitle">Found a dog?</h1>
-      <p class="msg" id="landmsg">Tap your phone on the back of its Who's a Good Tag to see who to call. The phone number is also printed on the front.</p>
+      <div class="paw" aria-hidden="true"><svg width="54" height="54" viewBox="0 0 120 120"><ellipse cx="60" cy="76" rx="20" ry="17" fill="#F3EFE6"/><circle cx="35" cy="52" r="9" fill="#F3EFE6"/><circle cx="51" cy="38" r="9" fill="#F3EFE6"/><circle cx="69" cy="38" r="9" fill="#F3EFE6"/><circle cx="85" cy="52" r="9" fill="#F3EFE6"/></svg></div>
+      <h1 id="l-title">Found a dog?</h1>
+      <p class="msg" id="l-msg">Tap your phone on the back of its Who's a Good Tag to see who to call. The phone number is also printed on the front.</p>
     </div>
   </section>
 
-  <footer>Who's a Good Tag · Placerville, California</footer>
+  <footer id="footer">Who's a Good Tag · Placerville, California</footer>
 </main>
 
 <script>
 (function(){
+  "use strict";
+  const CFG = window.GOODTAG || {};
   const $ = id => document.getElementById(id);
+  const views = ["loading","profile","codeview","formview","doneview","landing"];
+  function show(v){ views.forEach(x => $(x).hidden = (x !== v)); window.scrollTo(0,0); }
+
+  if(CFG.BUSINESS_NAME){ $("bizname").textContent = CFG.BUSINESS_NAME; }
+  $("footer").textContent = [CFG.BUSINESS_NAME, CFG.BUSINESS_TOWN].filter(Boolean).join(" · ");
+
+  // ---------- helpers
   const digits = s => (s||"").replace(/[^0-9+]/g,"");
-  const e164 = s => { let d = digits(s); if(!d) return ""; if(d[0]!=="+") d = (d.length===10 ? "+1" : "+") + d; return d; };
-  const pretty = s => { const d = digits(s).replace(/^\+?1/,""); return d.length===10 ? `(${d.slice(0,3)}) ${d.slice(3,6)}-${d.slice(6)}` : s; };
+  const e164 = s => { let d = digits(s); if(!d) return ""; if(d[0] !== "+") d = (d.length === 10 ? "+1" : "+") + d; return d; };
+  const pretty = s => { const d = digits(s).replace(/^\+?1(?=\d{10}$)/,""); return d.length === 10 ? `(${d.slice(0,3)}) ${d.slice(3,6)}-${d.slice(6)}` : (s||""); };
   const smsHref = (num, body) => `sms:${num}?&body=${encodeURIComponent(body)}`;
+  const first = s => (s||"").trim().split(/\s+/)[0];
 
-  const id = (new URLSearchParams(location.search).get("d") || "").trim().toLowerCase();
-  if(!id){ $("landing").hidden=false; return; }
-  if(!/^[a-z0-9]{4,16}$/.test(id)){ $("landtitle").textContent="Tag not set up yet"; $("landmsg").textContent="If you found a dog, check the front of the tag for a phone number."; $("landing").hidden=false; return; }
+  async function api(fn, args){
+    if(!CFG.SUPABASE_URL || CFG.SUPABASE_URL.indexOf("PASTE") === 0) throw new Error("not_configured");
+    const headers = {"Content-Type":"application/json", "apikey": CFG.SUPABASE_KEY};
+    if((CFG.SUPABASE_KEY||"").startsWith("eyJ")) headers["Authorization"] = "Bearer " + CFG.SUPABASE_KEY;
+    const r = await fetch(CFG.SUPABASE_URL.replace(/\/+$/,"") + "/rest/v1/rpc/" + fn,
+      {method:"POST", headers, body: JSON.stringify(args||{}), cache:"no-store"});
+    if(!r.ok) throw new Error("http_" + r.status);
+    return r.json();
+  }
 
-  fetch(`d/${id}.json`, {cache:"no-store"}).then(r=>{ if(r.status===404) return null; if(!r.ok) throw new Error(r.status); return r.json(); }).then(dog=>{
-    if(!dog){ $("landtitle").textContent="Tag not set up yet"; $("landmsg").textContent="This tag hasn't been linked to a dog yet. If you found a dog, check the front of the tag for a phone number."; $("landing").hidden=false; return; }
-    const name = dog.name || "this dog";
-    document.title = `${name} · Who's a Good Tag`;
-    $("dogname").textContent = `Hi, I'm ${name}!`;
-    $("message").textContent = dog.message || "";
-    if(dog.status === "lost") $("lost").hidden = false;
-    if(dog.photo){ $("photo").src = dog.photo; $("photo").alt = name; $("photo").hidden=false; $("paw").hidden=true; }
-    if(dog.reward){ $("reward").textContent = dog.reward; $("reward").hidden=false; }
+  const ERR = {
+    wrong: "That code doesn't match. Check the card that came with your tag and try again.",
+    locked: "Too many wrong tries. For safety this tag is locked for 15 minutes. Try again later.",
+    not_found: "We couldn't find this tag.",
+    already_set_up: "This tag is already set up. Use \"Edit this page\" to change it.",
+    not_set_up: "This tag hasn't been set up yet.",
+    missing_dog_name: "Please enter your dog's name.",
+    missing_owner_phone: "Please enter your phone number.",
+    bad_photo: "That photo couldn't be used. Try a different picture.",
+    bad_new_code: "Your new code needs 4 to 20 letters or numbers.",
+    network: "Couldn't connect. Check your signal and try again.",
+    not_configured: "This website isn't connected to its database yet."
+  };
+  const errText = e => ERR[e] || ERR.network;
 
-    const num = e164(dog.owner_phone);
-    const who = dog.owner_name ? dog.owner_name.split(" ")[0] : "my family";
-    $("calltext").textContent = `Call ${who} · ${pretty(dog.owner_phone)}`;
-    $("call").href = `tel:${num}`;
-    $("text").querySelector("span").textContent = `Text ${who}`;
-    $("text").href = smsHref(num, `Hi! I found ${name}.`);
+  // ---------- state
+  const params = new URLSearchParams(location.search);
+  const tagId = (params.get("t") || params.get("d") || "").replace(/[^A-Za-z0-9]/g,"").toLowerCase();
+  let tag = null;      // what the finder sees
+  let mode = "";       // "setup" | "edit"
+  let code = "";       // owner code, kept only in memory
+  let photoData = "";  // data URL or ""
 
-    $("loc").addEventListener("click", ()=>{
-      const note = $("locnote");
-      if(!navigator.geolocation){ location.href = smsHref(num, `Hi! I found ${name}.`); return; }
-      $("loctext").textContent = "Finding your location…";
-      navigator.geolocation.getCurrentPosition(p=>{
-        const link = `https://maps.google.com/?q=${p.coords.latitude.toFixed(5)},${p.coords.longitude.toFixed(5)}`;
-        $("loctext").textContent = "Text them where you found me";
-        location.href = smsHref(num, `Hi! I found ${name}. I'm here: ${link}`);
-      }, ()=>{
-        $("loctext").textContent = "Text them where you found me";
-        note.textContent = "Location wasn't shared. You can still text them and say where you are.";
-        note.hidden = false;
+  // ---------- finder view
+  function renderProfile(t){
+    const name = t.dog_name || "this dog";
+    document.title = `${name} · ${CFG.BUSINESS_NAME || "Who's a Good Tag"}`;
+    $("p-name").textContent = `Hi, I'm ${name}!`;
+    $("p-message").textContent = t.message || "";
+    $("p-message").hidden = !t.message;
+    $("p-lost").hidden = !t.lost;
+    if(t.photo){ $("p-photo").src = t.photo; $("p-photo").alt = name; $("p-photo").hidden = false; $("p-paw").hidden = true; }
+    else { $("p-photo").hidden = true; $("p-paw").hidden = false; }
+    $("p-reward").textContent = t.reward || ""; $("p-reward").hidden = !t.reward;
+
+    const num = e164(t.owner_phone), who = t.owner_name ? first(t.owner_name) : "my family";
+    $("p-calltext").textContent = `Call ${who} · ${pretty(t.owner_phone)}`;
+    $("p-call").href = `tel:${num}`;
+    $("p-texttext").textContent = `Text ${who}`;
+    $("p-text").href = smsHref(num, `Hi! I found ${name}.`);
+    $("p-loc").onclick = () => {
+      const note = $("p-locnote");
+      if(!navigator.geolocation){ location.href = smsHref(num, `Hi! I found ${name}. I'm at: `); return; }
+      $("p-loctext").textContent = "Finding your location…";
+      navigator.geolocation.getCurrentPosition(p => {
+        $("p-loctext").textContent = "Text them where you found me";
+        location.href = smsHref(num, `Hi! I found ${name}. I'm here: https://maps.google.com/?q=${p.coords.latitude.toFixed(5)},${p.coords.longitude.toFixed(5)}`);
+      }, () => {
+        $("p-loctext").textContent = "Text them where you found me";
+        note.textContent = "Your location wasn't shared, so just tell them where you are."; note.hidden = false;
         location.href = smsHref(num, `Hi! I found ${name}. I'm at: `);
       }, {enableHighAccuracy:true, timeout:10000});
-    });
+    };
 
-    if(dog.backup_phone){
-      $("backupname").textContent = `${dog.backup_name || "Backup"} · ${pretty(dog.backup_phone)}`;
-      $("backupcall").href = `tel:${e164(dog.backup_phone)}`;
-      $("backupcall").textContent = `Call ${dog.backup_name ? dog.backup_name.split(" ")[0] : "backup"}`;
-      $("backupcard").hidden = false;
+    const hasAddr = !!t.address, hasDrop = !!t.dropoff_note;
+    $("p-address").textContent = t.address || ""; $("p-address").hidden = !hasAddr;
+    $("p-dropoff").textContent = t.dropoff_note || ""; $("p-dropoff").hidden = !hasDrop;
+    $("p-directions").hidden = !hasAddr;
+    if(hasAddr) $("p-directions").href = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(t.address);
+    $("p-homecard").hidden = !(hasAddr || hasDrop);
+
+    if(t.backup_phone){
+      $("p-backupname").textContent = `${t.backup_name || "Backup"} · ${pretty(t.backup_phone)}`;
+      $("p-backupcall").href = `tel:${e164(t.backup_phone)}`;
+      $("p-backupcall").textContent = `Call ${t.backup_name ? first(t.backup_name) : "backup contact"}`;
+      $("p-backupcard").hidden = false;
+    } else $("p-backupcard").hidden = true;
+
+    const care = $("p-care"); care.replaceChildren();
+    (t.care_notes || "").split(/\n+/).map(s => s.trim()).filter(Boolean).forEach(n => {
+      const li = document.createElement("li"); li.textContent = n; care.appendChild(li);
+    });
+    $("p-carecard").hidden = !care.children.length;
+    show("profile");
+  }
+
+  // ---------- code entry
+  function openCode(m){
+    mode = m;
+    $("c-title").textContent = m === "setup" ? "Set up your tag" : "Edit your dog's page";
+    $("c-sub").textContent = m === "setup"
+      ? "Welcome! Enter the setup code from the card that came with your tag."
+      : "Enter your owner code to make changes.";
+    $("c-back").hidden = (m === "setup");
+    $("c-err").hidden = true; $("c-code").value = "";
+    $("c-tagid").textContent = m === "setup" ? `Tag ID ${tagId}` : "";
+    show("codeview"); $("c-code").focus();
+  }
+  $("p-owner").onclick = () => openCode("edit");
+  $("c-back").onclick = () => renderProfile(tag);
+  $("c-form").onsubmit = async ev => {
+    ev.preventDefault();
+    const c = $("c-code").value.trim();
+    if(!c) return;
+    $("c-go").disabled = true; $("c-err").hidden = true;
+    try{
+      const r = await api("owner_login", {p_id: tagId, p_code: c});
+      if(!r.ok){ $("c-err").textContent = errText(r.error); $("c-err").hidden = false; return; }
+      code = c; openForm(r.tag);
+    }catch(e){ $("c-err").textContent = errText(e.message); $("c-err").hidden = false; }
+    finally{ $("c-go").disabled = false; }
+  };
+
+  // ---------- owner form
+  const FIELDS = ["dog_name","message","owner_name","owner_phone","backup_name","backup_phone","address","care_notes","reward"];
+  function openForm(t){
+    const setup = (mode === "setup");
+    $("f-title").textContent = setup ? "Tell us about your dog" : `Edit ${t.dog_name || "your dog"}'s page`;
+    $("f-lostbox").hidden = setup;
+    FIELDS.forEach(k => { if(!setup || t[k]) $("f-" + k).value = t[k] || ""; });
+    $("f-dropoff").value = t.dropoff_note || "";
+    $("f-show_address").checked = !!t.show_address;
+    $("f-lost").checked = !!t.lost;
+    $("f-newcode").value = "";
+    $("f-codenote").textContent = setup
+      ? "You'll use your code to edit this page later. Keep the card, or choose your own code below."
+      : "Want a different owner code? Type it below. Leave it blank to keep your current one.";
+    setPhoto(t.photo || "");
+    $("f-err").hidden = true;
+    $("f-save").textContent = setup ? "Save and turn on my tag" : "Save changes";
+    show("formview");
+  }
+  function setPhoto(d){
+    photoData = d || "";
+    $("f-photoprev").hidden = !photoData; $("f-photoremove").hidden = !photoData;
+    if(photoData) $("f-photoprev").src = photoData; else $("f-photoprev").removeAttribute("src");
+    $("f-photo").value = "";
+  }
+  $("f-photoremove").onclick = () => setPhoto("");
+  $("f-photo").onchange = () => {
+    const file = $("f-photo").files[0]; if(!file) return;
+    const img = new Image(), url = URL.createObjectURL(file);
+    img.onload = () => {
+      const max = 600, s = Math.min(1, max / Math.max(img.width, img.height));
+      const c = document.createElement("canvas"); c.width = Math.round(img.width * s); c.height = Math.round(img.height * s);
+      c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
+      let q = 0.82, d = c.toDataURL("image/jpeg", q);
+      while(d.length > 380000 && q > 0.35){ q -= 0.12; d = c.toDataURL("image/jpeg", q); }
+      URL.revokeObjectURL(url); setPhoto(d);
+    };
+    img.onerror = () => { URL.revokeObjectURL(url); $("f-err").textContent = ERR.bad_photo; $("f-err").hidden = false; };
+    img.src = url;
+  };
+  $("f-cancel").onclick = () => { code = ""; if(mode === "setup") openCode("setup"); else renderProfile(tag); };
+  $("f-form").onsubmit = async ev => {
+    ev.preventDefault();
+    const data = {};
+    FIELDS.forEach(k => data[k] = $("f-" + k).value.trim());
+    data.dropoff_note = $("f-dropoff").value.trim();
+    data.show_address = $("f-show_address").checked;
+    data.lost = (mode === "edit") && $("f-lost").checked;
+    data.photo = photoData;
+    const err = !data.dog_name ? "missing_dog_name" : (digits(data.owner_phone).length < 7 ? "missing_owner_phone" : "");
+    if(err){ $("f-err").textContent = errText(err); $("f-err").hidden = false; $("f-err").scrollIntoView({block:"center"}); return; }
+    const newCode = $("f-newcode").value.trim();
+    $("f-save").disabled = true; $("f-err").hidden = true;
+    try{
+      let r;
+      if(mode === "setup"){
+        r = await api("claim_tag", {p_id: tagId, p_code: code, p_data: data});
+        if(r.ok && newCode){
+          const r2 = await api("owner_update", {p_id: tagId, p_code: code, p_data: data, p_new_code: newCode});
+          if(!r2.ok) r = r2;
+        }
+      } else {
+        r = await api("owner_update", {p_id: tagId, p_code: code, p_data: data, p_new_code: newCode || null});
+      }
+      if(!r.ok){ $("f-err").textContent = errText(r.error); $("f-err").hidden = false; $("f-err").scrollIntoView({block:"center"}); return; }
+      const finalCode = newCode || code;
+      $("d-title").textContent = mode === "setup" ? "Your tag is on!" : "Saved!";
+      $("d-sub").textContent = mode === "setup"
+        ? `${data.dog_name}'s page is live. Anyone who taps the tag will see it.`
+        : "Your changes are live right away.";
+      $("d-code").textContent = `Your owner code is ${finalCode.toUpperCase()}. Keep it somewhere safe so you can edit this page later.`;
+      $("d-code").hidden = !(mode === "setup" || newCode);
+      code = "";
+      show("doneview");
+    }catch(e){ $("f-err").textContent = errText(e.message); $("f-err").hidden = false; }
+    finally{ $("f-save").disabled = false; }
+  };
+  $("d-view").onclick = () => load();
+
+  // ---------- start
+  async function load(){
+    if(!tagId){ show("landing"); return; }
+    show("loading");
+    try{
+      const t = await api("get_tag", {p_id: tagId});
+      if(t.state === "unknown"){
+        $("l-title").textContent = "Tag not found";
+        $("l-msg").textContent = "This tag isn't in our system. If you found a dog, check the front of the tag for a phone number.";
+        show("landing"); return;
+      }
+      if(t.state === "new"){ openCode("setup"); return; }
+      tag = t; renderProfile(t);
+    }catch(e){
+      $("l-title").textContent = e.message === "not_configured" ? "Almost ready" : "Couldn't load this tag";
+      $("l-msg").textContent = e.message === "not_configured" ? ERR.not_configured
+        : "Check your signal and try again. The phone number is also printed on the front of the tag.";
+      show("landing");
     }
-    if(dog.home_area || dog.address){
-      $("homearea").textContent = dog.home_area || "";
-      if(dog.address){ $("address").textContent = dog.address; $("address").hidden=false; }
-      $("homecard").hidden = false;
-    }
-    const notes = (dog.care_notes||[]).filter(Boolean);
-    if(notes.length){ notes.forEach(n=>{ const li=document.createElement("li"); li.textContent=n; $("care").appendChild(li); }); $("carecard").hidden=false; }
-    if(dog.return_note){ $("returnnote").textContent = dog.return_note; $("returncard").hidden=false; }
-    $("profile").hidden = false;
-  }).catch(()=>{
-    $("landtitle").textContent = "Couldn't load this tag";
-    $("landmsg").textContent = "Check your connection and try again. The phone number is also printed on the front of the tag.";
-    $("landing").hidden = false;
-  });
+  }
+  load();
 })();
 </script>
 </body>

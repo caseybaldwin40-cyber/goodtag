@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Good Tag Admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Work+Sans:wght@400;500;600&display=swap">
+<script src="config.js"></script>
+<style>
+:root{
+  --forest:#1F3A2E; --orange:#C9601F; --bone:#F3EFE6; --card:#FFFFFF; --ink:#1A1F1C; --muted:#5A6359;
+  --line:#E2DCCF; --alert:#B3261E; --ok:#2E7D4F;
+  --display:'Archivo Black','Arial Black',system-ui,sans-serif;
+  --body:'Work Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bone);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.45}
+.wrap{max-width:860px;margin:0 auto;padding:20px 16px 48px;display:flex;flex-direction:column;gap:18px}
+.brand{display:flex;align-items:center;gap:10px;color:var(--forest);font-weight:600;font-size:14px;letter-spacing:.08em;text-transform:uppercase}
+.badge{width:30px;height:30px;border-radius:50%;background:var(--forest);color:var(--bone);display:grid;place-items:center;font-family:var(--display);font-size:11px;letter-spacing:0}
+h1{font-family:var(--display);font-weight:400;font-size:30px;margin:0;color:var(--forest)}
+h2{font-size:18px;margin:0;color:var(--forest)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end}
+label{display:flex;flex-direction:column;gap:6px;font-weight:600;font-size:14px}
+input{font:400 16px var(--body);padding:11px 13px;border:1px solid #CFC8B8;border-radius:10px;background:#fff;color:var(--ink)}
+.btn{font:600 16px var(--body);border-radius:10px;border:0;padding:12px 16px;min-height:44px;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center}
+.primary{background:var(--forest);color:var(--bone)}
+.ghost{background:#fff;color:var(--forest);border:1px solid var(--line)}
+.danger{background:#fff;color:var(--alert);border:1px solid #F0C9C5}
+.small{padding:7px 10px;min-height:34px;font-size:14px}
+.btn:disabled{opacity:.6}
+.btn:focus-visible,input:focus-visible{outline:3px solid var(--orange);outline-offset:2px}
+.note{color:var(--muted);font-size:14px;margin:0}
+.err{background:#FDECEA;color:var(--alert);border-radius:10px;padding:10px 12px;font-weight:600;margin:0}
+.ok{background:#E6F4EC;color:var(--ok);border-radius:10px;padding:10px 12px;font-weight:600;margin:0}
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px}
+table{border-collapse:collapse;width:100%;font-size:14px;background:#fff}
+th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line);white-space:nowrap;vertical-align:middle}
+th{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);background:#FAF8F3}
+td.mono,.mono{font-family:ui-monospace,Menlo,monospace}
+.pill{display:inline-block;padding:2px 9px;border-radius:999px;font-size:12px;font-weight:600}
+.pill.new{background:#EEE9DD;color:var(--muted)}
+.pill.active{background:#E6F4EC;color:var(--ok)}
+.pill.lost{background:#FDECEA;color:var(--alert)}
+.stats{display:flex;gap:10px;flex-wrap:wrap}
+.stat{background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px 14px;min-width:110px}
+.stat b{display:block;font-size:22px;font-variant-numeric:tabular-nums}
+.stat span{font-size:13px;color:var(--muted)}
+.actions{display:flex;gap:6px}
+[hidden]{display:none!important}
+/* printable setup cards */
+#printsheet{display:none}
+@media print{
+  body{background:#fff}
+  .wrap{display:none}
+  #printsheet{display:grid;grid-template-columns:repeat(2, 3.5in);gap:0.15in;padding:0.3in}
+  .pcard{width:3.5in;height:2in;border:1px dashed #999;border-radius:8px;padding:0.18in;display:flex;flex-direction:column;justify-content:space-between;break-inside:avoid;font-family:var(--body);color:#111}
+  .pcard .top{display:flex;align-items:center;gap:8px;font-weight:600;font-size:10pt;letter-spacing:.06em;text-transform:uppercase;color:#1F3A2E}
+  .pcard .code{font:700 24pt ui-monospace,Menlo,monospace;letter-spacing:.18em;color:#111}
+  .pcard .lab{font-size:8.5pt;color:#444;text-transform:uppercase;letter-spacing:.08em}
+  .pcard .how{font-size:9pt;color:#222}
+}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <div class="brand"><span class="badge">GT</span><span>Admin</span></div>
+
+  <!-- first-time: create password -->
+  <section id="v-setpw" class="card" hidden>
+    <h1>Welcome</h1>
+    <p class="note">Create your admin password. You'll use it to make tags and help customers. At least 8 characters. Write it down somewhere safe.</p>
+    <form id="setpw-form" class="row">
+      <label for="setpw">New admin password<input type="password" id="setpw" required autocomplete="new-password"></label>
+      <button class="btn primary" type="submit">Save password</button>
+    </form>
+    <p class="err" id="setpw-err" hidden></p>
+  </section>
+
+  <!-- login -->
+  <section id="v-login" class="card" hidden>
+    <h1>Sign in</h1>
+    <form id="login-form" class="row">
+      <label for="pw">Admin password<input type="password" id="pw" required autocomplete="current-password"></label>
+      <button class="btn primary" type="submit" id="login-go">Sign in</button>
+    </form>
+    <p class="err" id="login-err" hidden></p>
+  </section>
+
+  <p class="err" id="cfg-err" hidden>This site isn't connected to its database yet. Paste your Supabase values into config.js.</p>
+
+  <!-- dashboard -->
+  <section id="v-dash" hidden style="display:flex;flex-direction:column;gap:18px">
+    <div class="stats">
+      <div class="stat"><b id="s-total">0</b><span>Tags made</span></div>
+      <div class="stat"><b id="s-active">0</b><span>Set up by owners</span></div>
+      <div class="stat"><b id="s-new">0</b><span>Not set up yet</span></div>
+      <div class="stat"><b id="s-lost">0</b><span>Lost right now</span></div>
+    </div>
+
+    <div class="card">
+      <h2>Make new tags</h2>
+      <p class="note">Each tag gets its own link (you write it onto the NFC chip) and a setup code (goes in the box for the customer). The setup card shows the Tag ID so you can match each card to its tag.</p>
+      <form id="make-form" class="row">
+        <label for="make-count">How many<input type="number" id="make-count" min="1" max="200" value="10" style="width:110px"></label>
+        <label for="make-batch">Batch name (optional)<input type="text" id="make-batch" maxlength="40" placeholder="Oct 2026"></label>
+        <button class="btn primary" type="submit" id="make-go">Make tags</button>
+      </form>
+      <p class="err" id="make-err" hidden></p>
+      <div id="made" hidden style="display:flex;flex-direction:column;gap:10px">
+        <p class="ok" id="made-msg"></p>
+        <p class="note"><b>Save these codes now.</b> Setup codes are only shown here once. (If one gets lost, use "New code" below.)</p>
+        <div class="row">
+          <button class="btn ghost" id="made-csv" type="button">Download list (CSV)</button>
+          <button class="btn ghost" id="made-print" type="button">Print setup cards</button>
+          <button class="btn ghost" id="made-copy" type="button">Copy all links</button>
+        </div>
+        <div class="tablewrap"><table><thead><tr><th>#</th><th>Tag ID</th><th>Link to write on the chip</th><th>Setup code</th><th></th></tr></thead><tbody id="made-rows"></tbody></table></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="row" style="justify-content:space-between;align-items:center">
+        <h2>All tags</h2>
+        <div class="row">
+          <input type="search" id="filter" placeholder="Search name, phone, ID" aria-label="Search tags" style="min-width:200px">
+          <button class="btn ghost small" id="refresh" type="button">Refresh</button>
+        </div>
+      </div>
+      <p class="ok" id="list-msg" hidden></p>
+      <p class="err" id="list-err" hidden></p>
+      <div class="tablewrap"><table>
+        <thead><tr><th>Status</th><th>Dog</th><th>Owner</th><th>Phone</th><th>Tag ID</th><th>Batch</th><th>Made</th><th></th></tr></thead>
+        <tbody id="rows"></tbody>
+      </table></div>
+      <p class="note" id="empty" hidden>No tags yet. Make some above.</p>
+    </div>
+
+    <div class="card">
+      <h2>How to load a chip</h2>
+      <p class="note">In the free <b>NFC Tools</b> app: Write → Add a record → URL/URI → paste the tag's link → Write → hold the chip to your phone. Test it by tapping. Only use "Lock tag" on finished tags; locking is permanent.</p>
+    </div>
+  </section>
+</main>
+<div id="printsheet"></div>
+
+<script>
+(function(){
+  "use strict";
+  const CFG = window.GOODTAG || {};
+  const $ = id => document.getElementById(id);
+  const base = location.origin + location.pathname.replace(/admin(\.html)?$/, "");
+  const linkFor = id => `${base}?t=${id}`;
+  let pw = "", all = [], made = [];
+
+  async function api(fn, args){
+    if(!CFG.SUPABASE_URL || CFG.SUPABASE_URL.indexOf("PASTE") === 0) throw new Error("not_configured");
+    const headers = {"Content-Type":"application/json", "apikey": CFG.SUPABASE_KEY};
+    if((CFG.SUPABASE_KEY||"").startsWith("eyJ")) headers["Authorization"] = "Bearer " + CFG.SUPABASE_KEY;
+    const r = await fetch(CFG.SUPABASE_URL.replace(/\/+$/,"") + "/rest/v1/rpc/" + fn,
+      {method:"POST", headers, body: JSON.stringify(args||{}), cache:"no-store"});
+    if(!r.ok) throw new Error("http_" + r.status);
+    return r.json();
+  }
+  const ERR = {wrong:"Wrong password.", locked:"Too many wrong tries. Locked for 15 minutes.", not_set:"No admin password yet.",
+    too_short:"Use at least 8 characters.", already_set:"A password is already set. Sign in instead.",
+    count_1_to_200:"Make between 1 and 200 tags at a time.", not_found:"Tag not found.",
+    not_configured:"This site isn't connected to its database yet. Paste your Supabase values into config.js."};
+  const msg = e => ERR[e] || "Couldn't connect. Check your internet and try again.";
+  function err(id, e){ $(id).textContent = msg(e); $(id).hidden = false; }
+  function view(v){ ["v-setpw","v-login","v-dash"].forEach(x => $(x).hidden = x !== v); }
+  function copy(text, btn){
+    const done = () => { const t = btn.textContent; btn.textContent = "Copied!"; setTimeout(() => btn.textContent = t, 1200); };
+    if(navigator.clipboard) navigator.clipboard.writeText(text).then(done, () => prompt("Copy this:", text));
+    else prompt("Copy this:", text);
+  }
+  const fmtDate = s => s ? new Date(s).toLocaleDateString() : "";
+
+  // ---------- start
+  (async function start(){
+    try{
+      const s = await api("admin_status");
+      view(s.password_set ? "v-login" : "v-setpw");
+      (s.password_set ? $("pw") : $("setpw")).focus();
+    }catch(e){ $("cfg-err").textContent = msg(e.message); $("cfg-err").hidden = false; }
+  })();
+
+  $("setpw-form").onsubmit = async ev => {
+    ev.preventDefault(); $("setpw-err").hidden = true;
+    try{
+      const r = await api("admin_set_password", {p_password: $("setpw").value});
+      if(!r.ok) return err("setpw-err", r.error);
+      pw = $("setpw").value; $("setpw").value = ""; await loadList(); view("v-dash");
+    }catch(e){ err("setpw-err", e.message); }
+  };
+  $("login-form").onsubmit = async ev => {
+    ev.preventDefault(); $("login-err").hidden = true; $("login-go").disabled = true;
+    try{
+      const r = await api("admin_list_tags", {p_password: $("pw").value});
+      if(!r.ok) return err("login-err", r.error);
+      pw = $("pw").value; $("pw").value = ""; all = r.tags; render(); view("v-dash");
+    }catch(e){ err("login-err", e.message); }
+    finally{ $("login-go").disabled = false; }
+  };
+
+  // ---------- list
+  async function loadList(){
+    $("list-err").hidden = true;
+    try{
+      const r = await api("admin_list_tags", {p_password: pw});
+      if(!r.ok) return err("list-err", r.error);
+      all = r.tags; render();
+    }catch(e){ err("list-err", e.message); }
+  }
+  $("refresh").onclick = loadList;
+  $("filter").oninput = render;
+
+  function render(){
+    $("s-total").textContent = all.length;
+    $("s-active").textContent = all.filter(t => t.status === "active").length;
+    $("s-new").textContent = all.filter(t => t.status === "new").length;
+    $("s-lost").textContent = all.filter(t => t.lost).length;
+    const q = $("filter").value.trim().toLowerCase();
+    const rows = all.filter(t => !q || [t.id, t.dog_name, t.owner_name, t.owner_phone, t.batch].some(v => (v||"").toLowerCase().includes(q)));
+    const tb = $("rows"); tb.replaceChildren();
+    $("empty").hidden = all.length > 0;
+    rows.forEach(t => {
+      const tr = document.createElement("tr");
+      const cell = (txt, cls) => { const td = document.createElement("td"); td.textContent = txt || ""; if(cls) td.className = cls; tr.appendChild(td); return td; };
+      const st = cell(""); const pill = document.createElement("span");
+      pill.className = "pill " + (t.lost ? "lost" : t.status); pill.textContent = t.lost ? "Lost" : (t.status === "active" ? "Set up" : "New");
+      st.appendChild(pill);
+      cell(t.dog_name); cell(t.owner_name); cell(t.owner_phone); cell(t.id, "mono"); cell(t.batch); cell(fmtDate(t.created_at));
+      const act = cell(""); const box = document.createElement("div"); box.className = "actions"; act.appendChild(box);
+      const b = (label, cls, fn) => { const x = document.createElement("button"); x.type = "button"; x.className = "btn small " + cls; x.textContent = label; x.onclick = () => fn(x); box.appendChild(x); };
+      b("Copy link", "ghost", x => copy(linkFor(t.id), x));
+      b("Open", "ghost", () => window.open(linkFor(t.id), "_blank", "noopener"));
+      b("New code", "ghost", () => resetCode(t));
+      b("Erase", "danger", () => wipe(t));
+      tb.appendChild(tr);
+    });
+  }
+  function listMsg(text){ $("list-msg").textContent = text; $("list-msg").hidden = false; $("list-msg").scrollIntoView({block:"center"}); }
+  async function resetCode(t){
+    if(!confirm(`Make a new owner code for ${t.dog_name || t.id}? The old code will stop working.`)) return;
+    try{
+      const r = await api("admin_reset_code", {p_password: pw, p_id: t.id});
+      if(!r.ok) return err("list-err", r.error);
+      listMsg(`New code for ${t.dog_name || t.id}: ${r.code}. Send it to the owner.`);
+    }catch(e){ err("list-err", e.message); }
+  }
+  async function wipe(t){
+    if(!confirm(`Erase ${t.dog_name || t.id}? All of the dog's info will be deleted and the tag goes back to brand new. This can't be undone.`)) return;
+    try{
+      const r = await api("admin_wipe_tag", {p_password: pw, p_id: t.id});
+      if(!r.ok) return err("list-err", r.error);
+      listMsg(`Erased. Tag ${t.id} is brand new again. Its new setup code is ${r.code}.`);
+      loadList();
+    }catch(e){ err("list-err", e.message); }
+  }
+
+  // ---------- make tags
+  $("make-form").onsubmit = async ev => {
+    ev.preventDefault(); $("make-err").hidden = true; $("make-go").disabled = true;
+    try{
+      const n = parseInt($("make-count").value, 10);
+      const r = await api("admin_create_tags", {p_password: pw, p_count: n, p_batch: $("make-batch").value.trim() || null});
+      if(!r.ok) return err("make-err", r.error);
+      made = r.tags.map(t => ({...t, link: linkFor(t.id), batch: $("make-batch").value.trim()}));
+      $("made-msg").textContent = `Made ${made.length} new tag${made.length === 1 ? "" : "s"}.`;
+      const tb = $("made-rows"); tb.replaceChildren();
+      made.forEach((t, i) => {
+        const tr = document.createElement("tr");
+        [String(i + 1), t.id, t.link, t.code].forEach((v, j) => { const td = document.createElement("td"); td.textContent = v; if(j) td.className = "mono"; tr.appendChild(td); });
+        const td = document.createElement("td"); const x = document.createElement("button");
+        x.type = "button"; x.className = "btn small ghost"; x.textContent = "Copy link"; x.onclick = () => copy(t.link, x);
+        td.appendChild(x); tr.appendChild(td); tb.appendChild(tr);
+      });
+      $("made").hidden = false;
+      loadList();
+    }catch(e){ err("make-err", e.message); }
+    finally{ $("make-go").disabled = false; }
+  };
+  $("made-copy").onclick = ev => copy(made.map(t => t.link).join("\n"), ev.target);
+  $("made-csv").onclick = () => {
+    const csv = "number,tag_id,link,setup_code,batch\n" + made.map((t, i) => [i + 1, t.id, t.link, t.code, `"${(t.batch||"").replace(/"/g,'""')}"`].join(",")).join("\n");
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(new Blob([csv], {type:"text/csv"}));
+    a.download = `goodtag-${new Date().toISOString().slice(0,10)}.csv`;
+    document.body.appendChild(a); a.click(); a.remove();
+  };
+  $("made-print").onclick = () => {
+    const sheet = $("printsheet"); sheet.replaceChildren();
+    made.forEach(t => {
+      const c = document.createElement("div"); c.className = "pcard";
+      const top = document.createElement("div"); top.className = "top"; top.textContent = (CFG.BUSINESS_NAME || "Who's a Good Tag");
+      const mid = document.createElement("div");
+      const lab = document.createElement("div"); lab.className = "lab"; lab.textContent = "Your setup code";
+      const code = document.createElement("div"); code.className = "code"; code.textContent = t.code;
+      const tid = document.createElement("div"); tid.className = "lab"; tid.textContent = "Tag ID " + t.id;
+      mid.append(lab, code, tid);
+      const how = document.createElement("div"); how.className = "how";
+      how.textContent = "Tap your phone on the back of your tag, enter this code, and fill in your dog's info. Keep this card: you'll use the code to make changes later.";
+      c.append(top, mid, how); sheet.appendChild(c);
+    });
+    window.print();
+  };
+})();
+</script>
+</body>
+</html>

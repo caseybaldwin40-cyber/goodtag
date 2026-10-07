@@ -1,0 +1,18 @@
+{
+  "name": "Kerchek",
+  "status": "home",
+  "photo": "",
+  "message": "If I'm out on my own, I'm probably lost. Please help me get home.",
+  "owner_name": "",
+  "owner_phone": "916 850 9518",
+  "backup_name": "",
+  "backup_phone": "",
+  "home_area": "Placerville, CA",
+  "address": "",
+  "care_notes": [
+    "Friendly",
+    "Add notes here: allergies, medications, shy with other dogs, etc."
+  ],
+  "return_note": "If no one picks up, please text my family and keep me somewhere safe. They'll come get me right away.",
+  "reward": ""
+}
